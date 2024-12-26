@@ -9,3 +9,6 @@ global using Truckoom.Maintenance.Infrastructure;
 global using System.Diagnostics;
 global using System.Net.Http.Headers;
 global using System.Threading.RateLimiting;
+global using Serilog;
+global using Truckoom.Maintenance.Api.EndPoints;
+global using Truckoom.Maintenance.Api.Extension;
