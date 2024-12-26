@@ -17,26 +17,26 @@ public static class ValidationFilter
         return invocationContext => next(invocationContext);
     }
     private static async ValueTask<object> Validate(IEnumerable<ValidationDescriptor> validationDescriptors, EndpointFilterInvocationContext invocationContext, EndpointFilterDelegate next)
-{
-    foreach (var descriptor in validationDescriptors)
     {
-        var argument = invocationContext.Arguments[descriptor.ArgumentIndex];
-
-        if (argument is not null)
+        foreach (var descriptor in validationDescriptors)
         {
-            var validationResult = await descriptor.Validator.ValidateAsync(
-                new ValidationContext<object>(argument)
-            );
+            var argument = invocationContext.Arguments[descriptor.ArgumentIndex];
 
-            if (!validationResult.IsValid)
+            if (argument is not null)
             {
-                return Results.ValidationProblem(validationResult.ToDictionary());
+                var validationResult = await descriptor.Validator.ValidateAsync(
+                    new ValidationContext<object>(argument)
+                );
+
+                if (!validationResult.IsValid)
+                {
+                    return Results.ValidationProblem(validationResult.ToDictionary());
+                }
             }
         }
-    }
 
-    return await next.Invoke(invocationContext);
-}
+        return await next.Invoke(invocationContext);
+    }
     private static IEnumerable<ValidationDescriptor> GetValidators(MethodInfo methodInfo, IServiceProvider serviceProvider)
     {
         foreach (var item in methodInfo.GetParameters().Select((parameter, index) => new { parameter, index }))

@@ -8,14 +8,17 @@ builder.Services.AddSwaggerGen(setup =>
 {
     setup.SwaggerDoc("v1", new OpenApiInfo()
     {
-        Description = "ASP.NET Core 8.0 - Minimal API Example - Todo API implementation using ASP.NET Core Minimal API," +
-            "Entity Framework Core, Token authentication, Versioning, Unit Testing and Open API.",
-        Title = "Todo Api",
+        Description = "An API for managing truck maintenance at Truckoom." +
+                          "This API allows users to create, view, update, and delete truck maintenance records. " +
+                          "It uses ASP.NET Core 8.0 Minimal API, Entity Framework Core for data access, " +
+                          "token authentication for secure access, versioning for API evolution, " +
+                          "unit testing for code quality, and OpenAPI (Swagger) for documentation.",
+        Title = "Truckoom Maintenance Api",
         Version = "v1",
         Contact = new OpenApiContact()
         {
-            Name = "anuraj",
-            Url = new Uri("https://dotnetthoughts.net")
+            Name = "eHassan",
+            Url = new Uri("https://www.linkedin.com/in/ebad-hassan-5272a5192")
         }
     });
 
@@ -31,6 +34,8 @@ builder.Services.AddSwaggerGen(setup =>
     setup.OperationFilter<AuthorizationHeaderOperationHeader>();
     setup.OperationFilter<ApiVersionOperationFilter>();
 });
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddHealthChecks().AddDbContextCheck<TruckoomDbContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
 builder.Services.AddHttpContextAccessor();
@@ -41,6 +46,8 @@ builder.Services.AddApiVersioning(options =>
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.ApiVersionReader = new HeaderApiVersionReader("api-version");
 });
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,46 +57,33 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+var versionSet = app.NewApiVersionSet()
+                    .HasApiVersion(new ApiVersion(1, 0))
+                    .HasApiVersion(new ApiVersion(2, 0))
+                    .ReportApiVersions()
+                    .Build();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Truckoom Maintenance v1");
 });
 
+
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/health", async (HealthCheckService healthCheckService) =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-// app.MapGet("/health", async (HealthCheckService healthCheckService) =>
-// {
-//     var report = await healthCheckService.CheckHealthAsync();
-//     return report.Status == HealthStatus.Healthy ?
-//         Results.Ok(report) : Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
-// }).WithOpenApi()
-// .WithTags(["Health"])
-// .RequireRateLimiting(jwtPolicyName)
-// .Produces(200)
-// .ProducesProblem(503)
-// .Produces(429);
+    var report = await healthCheckService.CheckHealthAsync();
+    return report.Status == HealthStatus.Healthy ?
+        Results.Ok(report) : Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+}).WithOpenApi()
+.WithTags(["Health"])
+.RequireRateLimiting(jwtPolicyName)
+.Produces(200)
+.ProducesProblem(503)
+.Produces(429);
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

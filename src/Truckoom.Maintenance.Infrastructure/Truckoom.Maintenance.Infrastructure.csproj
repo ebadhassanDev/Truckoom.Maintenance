@@ -5,5 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+<ItemGroup>
+    <ProjectReference Include="..\Truckoom.Maintenance.Application\Truckoom.Maintenance.Application.csproj" />
+    <ProjectReference Include="..\Truckoom.Maintenance.Core\Truckoom.Maintenance.Core.csproj" />
+  </ItemGroup>
+<ItemGroup>
+  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+</ItemGroup>
 </Project>
