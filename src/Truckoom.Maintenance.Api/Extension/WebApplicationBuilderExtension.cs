@@ -117,6 +117,7 @@ public static class WebApplicationBuilderExtension
         _ = builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
         _ = builder.Services.AddHttpContextAccessor();
         #endregion Http & Endpoints
+        
         return builder;
     }
 }
