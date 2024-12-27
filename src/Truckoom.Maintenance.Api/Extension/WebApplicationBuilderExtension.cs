@@ -77,7 +77,7 @@ public static class WebApplicationBuilderExtension
         #endregion Swagger Documentation
 
         #region Api Versionining
-        builder.Services.AddApiVersioning(options =>
+        _ = builder.Services.AddApiVersioning(options =>
         {
             options.DefaultApiVersion = new ApiVersion(1, 0);
             options.ReportApiVersions = true;
@@ -92,12 +92,12 @@ public static class WebApplicationBuilderExtension
 
         #region Authentication
         _ = builder.Services.AddAuthorization();
-        _ = builder.Services.AddAuthentication("Bearer").AddJwtBearer();
+        //_ = builder.Services.AddAuthentication("Bearer").AddJwtBearer();
         _ = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(option => option.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]!)),
             ValidateIssuerSigningKey = true
         });
@@ -111,13 +111,13 @@ public static class WebApplicationBuilderExtension
         _ = builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         _ = builder.Services.AddHealthChecks().AddDbContextCheck<TruckoomDbContext>();
         #endregion Database Health  Checkup
-        
+
         #region Http & Endpoints
         _ = builder.Services.AddEndpointsApiExplorer();
         _ = builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
         _ = builder.Services.AddHttpContextAccessor();
         #endregion Http & Endpoints
-        
+
         return builder;
     }
 }

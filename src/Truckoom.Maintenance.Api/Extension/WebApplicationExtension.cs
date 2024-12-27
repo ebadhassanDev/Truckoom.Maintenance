@@ -10,12 +10,17 @@ public static class WebApplicationExtension
         _ = app.UseSerilogRequestLogging();
         #endregion logging
 
+        #region Security
+        _ = app.UseHsts();
+        #endregion Security
+
         #region Api Configuration
         _ = app.UseHttpsRedirection();
         #endregion Api Configuration
 
         #region EndPoints Configuration
         _ = app.MapServicesEndPoints();
+        _ = app.MapSignInEndPoints();
         #endregion EndPoints Configuration
 
         #region Swagger

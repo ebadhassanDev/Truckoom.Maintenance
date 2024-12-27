@@ -14,23 +14,23 @@ public class AuthorizationHeaderOperationHeader : IOperationFilter
         {
             return;
         }
-        if (operation.Parameters == null)
-            operation.Parameters = new List<OpenApiParameter>();
+        operation.Parameters ??= [];
 
-        operation.Security = new List<OpenApiSecurityRequirement>();
-
-        //Add JWT bearer type
-        operation.Security.Add(new OpenApiSecurityRequirement() {
-                {
-                    new OpenApiSecurityScheme {
-                        Reference = new OpenApiReference {
-                            Id = "Bearer",
-                            Type = ReferenceType.SecurityScheme
-                        }
-                    },
-                    new List<string>()
+        operation.Security =
+        [
+            //Add JWT bearer type
+            new OpenApiSecurityRequirement() {
+                    {
+                        new OpenApiSecurityScheme {
+                            Reference = new OpenApiReference {
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new List<string>()
+                    }
                 }
-            }
-        );
+,
+        ];
     }
 }

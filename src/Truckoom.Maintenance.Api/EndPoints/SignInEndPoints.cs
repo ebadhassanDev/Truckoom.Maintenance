@@ -15,12 +15,12 @@ public static class SignInEndPoints
         .WithDescription("Looking for login to access the dashboard")
         .WithOpenApi();
 
-        _ = app.MapPost("/signup", UserSignupAsync)
+        _ = root.MapPost("/signup", UserSignupAsync)
         .Accepts<UserDto>("application/json")
         .Produces(200)
         .ProducesProblem(500);
 
-        _ = app.MapPost("/signin", UserSignInAsync)
+        _ = root.MapPost("/signin", UserSignInAsync)
         .Produces(200)
         .Produces(201)
         .ProducesProblem(500);

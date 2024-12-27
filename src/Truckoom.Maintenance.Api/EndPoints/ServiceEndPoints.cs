@@ -15,23 +15,23 @@ public static class ServiceEndPoints
         .WithOpenApi();
 
 #pragma warning disable CA2263
-        _ = app.MapGet("/", GetAllServicesAsync)
+        _ = root.MapGet("/", GetAllServicesAsync)
         .Produces(200, typeof(IEnumerable<Service>))
         .ProducesProblem(401)
         .ProducesProblem(429)
         .ProducesProblem(500);
 #pragma warning disable CA2263
 
-        _ = app.MapPost("/", AddServiceAsync)
+        _ = root.MapPost("/", AddServiceAsync)
         .Accepts<Service>("application/json")
         .Produces(201)
         .Produces(200)
         .ProducesProblem(500);
 
-        _ = app.MapDelete("/{id}", DeleteServiceAsync)
+        _ = root.MapDelete("/{id}", DeleteServiceAsync)
         .Produces(204).ProducesProblem(404).ProducesProblem(401).Produces(429);
 
-        _ = app.MapGet("/{id}", GetServiceByIdAsync)
+        _ = root.MapGet("/{id}", GetServiceByIdAsync)
         .Produces(200, typeof(Service))
         .ProducesProblem(401)
         .Produces(429);

@@ -11,7 +11,7 @@ public class TruckoomDbContext(DbContextOptions<TruckoomDbContext> option) : DbC
 {
     public DbSet<Service> Services { get; set; }
     public DbSet<ServiceTasks> Tasks { get; set; }
-    public DbSet<User> User {get;set;}
+    public DbSet<User> User { get; set;}
     protected override void OnModelCreating(ModelBuilder modelBuilder) => modelBuilder.Entity<Service>()
             .HasMany(s => s.Tasks)
             .WithOne()
