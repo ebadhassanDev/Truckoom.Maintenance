@@ -3,22 +3,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.ConfigureApplicationBuilder();
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddHealthChecks().AddDbContextCheck<TruckoomDbContext>();
-builder.Services.AddEndpointsApiExplorer();
-builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 var app = builder.Build().ConfigureApplication().ConfigureApiRoutes(builder.Configuration);
-;
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    _ = app.MapOpenApi();
 }
-
 var versionSet = app.NewApiVersionSet()
                     .HasApiVersion(new ApiVersion(1, 0))
                     .HasApiVersion(new ApiVersion(2, 0))

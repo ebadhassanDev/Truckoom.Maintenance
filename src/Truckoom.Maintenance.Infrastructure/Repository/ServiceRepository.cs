@@ -1,11 +1,8 @@
 namespace Truckoom.Maintenance.Infrastructure.Repository;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Truckoom.Maintenance.Core;
+using Truckoom.Maintenance.Core.Models;
 
 internal class ServiceRepository : IServiceRepository
 {

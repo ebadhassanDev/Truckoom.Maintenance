@@ -14,7 +14,7 @@ public class AuthService(IUserRepository repository)
         {
             return false;
         }
-        var hashedPassword = this.HashPassword(password);
+        var hashedPassword = HashPassword(password);
         User user = new()
         {
             Username = userName,
@@ -28,18 +28,18 @@ public class AuthService(IUserRepository repository)
     public async Task<User?> SignInAsync(string username, string password)
     {
         var user = await this._userRepository.GetUsernameAsync(username);
-        if (user is null || !this.VerifyPassword(password, user.PasswordHash))
+        if (user is null || !VerifyPassword(password, user.PasswordHash))
         {
             return default;
         }
         return user;
     }
-    private bool VerifyPassword(string password, string hasedPassword)
+    private static bool VerifyPassword(string password, string hasedPassword)
     {
-        var hashedInput = this.HashPassword(password);
+        var hashedInput = HashPassword(password);
         return hashedInput == hasedPassword;
     }
-    private string HashPassword(string password)
+    private static string HashPassword(string password)
     {
         using var sha256 = SHA256.Create();
         var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));

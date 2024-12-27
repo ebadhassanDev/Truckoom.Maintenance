@@ -8,5 +8,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Truckoom.Maintenance.Core\Truckoom.Maintenance.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.0" />
+  </ItemGroup>
 
 </Project>

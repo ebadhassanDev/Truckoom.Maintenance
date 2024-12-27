@@ -16,7 +16,7 @@ public static class AppHealthEndPoint
                 Results.Ok(report) : Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
         }).WithOpenApi()
            .WithTags(["Health"])
-           .RequireRateLimiting(configuration["jwtPolicyName"])
+           .RequireRateLimiting(configuration["jwtPolicyName"]!)
            .Produces(200)
            .ProducesProblem(503)
            .Produces(429);

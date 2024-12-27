@@ -14,19 +14,14 @@ public static class WebApplicationExtension
         _ = app.UseHttpsRedirection();
         #endregion Api Configuration
 
-        #region MinimalApi
+        #region EndPoints Configuration
         _ = app.MapServicesEndPoints();
-        #endregion MinimalApi
+        #endregion EndPoints Configuration
 
         #region Swagger
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Truckoom Maintenance v1");
-        });
-
+        _ = app.UseSwagger();
+        _ = app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Truckoom Maintenance v1"));
         #endregion Swagger
-
 
         return app;
     }

@@ -1,6 +1,6 @@
 namespace Truckoom.Maintenance.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Truckoom.Maintenance.Core;
+using Truckoom.Maintenance.Core.Models;
 using Truckoom.Maintenance.Infrastructure.Repository;
 
 public static class InfrastructureExtension

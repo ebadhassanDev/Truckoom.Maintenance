@@ -1,4 +1,4 @@
-namespace Truckoom.Maintenance.Core;
+namespace Truckoom.Maintenance.Core.Models;
 /// <summary>
 /// Defines an interface for a repository that manages Service entities.
 /// </summary>

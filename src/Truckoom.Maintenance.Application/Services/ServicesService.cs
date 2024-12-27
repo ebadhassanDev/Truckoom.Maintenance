@@ -1,6 +1,6 @@
 namespace Truckoom.Maintenance.Application.Services;
 
-using Truckoom.Maintenance.Core;
+using Truckoom.Maintenance.Core.Models;
 public class ServicesService(IServiceRepository service)
 {
     private readonly IServiceRepository repository = service;

@@ -2,6 +2,7 @@ namespace Truckoom.Maintenance.Api.Configurations;
 
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Extensions.Options;
+using Truckoom.Maintenance.Api.Constants;
 
 /// <summary>
 ///     Configures cross-origin resource sharing (CORS) policies.
@@ -11,12 +12,9 @@ public class CorsConfiguration : IConfigureOptions<CorsOptions>
 {
     public void Configure(CorsOptions options)
     {
-        var allowedOrigins = this.configuration.GetSection("CorsAllowedOrigins").Get<string[]>();
-        // Allow client requests only from cashtag domains and localhost:
         options.AddPolicy(
             CorsPolicyName.AllowDomainAny,
             builder => builder
-                .WithOrigins(allowedOrigins)
                 .SetIsOriginAllowedToAllowWildcardSubdomains()
                 .AllowAnyHeader()
                 .AllowAnyMethod()

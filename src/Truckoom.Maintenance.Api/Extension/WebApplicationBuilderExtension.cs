@@ -91,19 +91,32 @@ public static class WebApplicationBuilderExtension
         #endregion Dependency Injection
 
         #region Authentication
+        _ = builder.Services.AddAuthorization();
+        _ = builder.Services.AddAuthentication("Bearer").AddJwtBearer();
         _ = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(option => 
+        .AddJwtBearer(option => option.TokenValidationParameters = new TokenValidationParameters
         {
-            option.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"])),
-                ValidateIssuerSigningKey = true
-            };
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]!)),
+            ValidateIssuerSigningKey = true
         });
         #endregion Authentication
+
+        #region Cors Policy
+        _ = builder.Services.ConfigureCorsPolicy();
+        #endregion 
+
+        #region Database Health  Checkup
+        _ = builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        _ = builder.Services.AddHealthChecks().AddDbContextCheck<TruckoomDbContext>();
+        #endregion Database Health  Checkup
         
+        #region Http & Endpoints
+        _ = builder.Services.AddEndpointsApiExplorer();
+        _ = builder.WebHost.UseKestrel(options => options.AddServerHeader = false);
+        _ = builder.Services.AddHttpContextAccessor();
+        #endregion Http & Endpoints
         return builder;
     }
 }

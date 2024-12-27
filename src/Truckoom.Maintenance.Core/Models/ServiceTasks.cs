@@ -1,4 +1,4 @@
-namespace Truckoom.Maintenance.Core;
+namespace Truckoom.Maintenance.Core.Models;
 
 using System.ComponentModel.DataAnnotations;
 
