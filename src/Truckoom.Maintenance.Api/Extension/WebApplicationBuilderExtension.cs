@@ -4,6 +4,9 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 public static class WebApplicationBuilderExtension
 {
@@ -87,6 +90,20 @@ public static class WebApplicationBuilderExtension
         _ = builder.Services.AddInfrastructure();
         #endregion Dependency Injection
 
+        #region Authentication
+        _ = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(option => 
+        {
+            option.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"])),
+                ValidateIssuerSigningKey = true
+            };
+        });
+        #endregion Authentication
+        
         return builder;
     }
 }
