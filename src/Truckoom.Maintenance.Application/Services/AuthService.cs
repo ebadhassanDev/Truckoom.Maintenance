@@ -5,9 +5,10 @@ using System.Text;
 using Truckoom.Maintenance.Core.Interfaces;
 using Truckoom.Maintenance.Core.Models;
 
-public class AuthService(IUserRepository repository) : IAuthService
+public class AuthService(IUserRepository repository, ITokenService tokenService) : IAuthService
 {
     private readonly IUserRepository _userRepository = repository;
+    private readonly ITokenService _tokenService = tokenService;
     public async Task<bool> SignupAsync(UserDto userDto)
     {
         if (await this._userRepository.GetUsernameAsync(userDto.UserName) is not null)
@@ -34,6 +35,7 @@ public class AuthService(IUserRepository repository) : IAuthService
         {
             return default;
         }
+        user.Token = this._tokenService.GenerateJwtToken(user.Username, user.Email);
         return user;
     }
     private static bool VerifyPassword(string password, string hasedPassword)

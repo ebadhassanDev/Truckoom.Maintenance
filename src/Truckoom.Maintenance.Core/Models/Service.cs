@@ -11,7 +11,7 @@ public class Service
     public string ServiceName { get; set; }
     [Required]
     public DateTime ServiceDate { get; set; }
-    public List<ServiceTasks> Tasks { get; set; } = [];
+    public List<ServiceTasks> ServiceTasks { get; set; } = [];
 }
 
 

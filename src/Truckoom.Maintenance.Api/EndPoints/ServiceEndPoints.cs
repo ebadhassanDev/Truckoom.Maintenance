@@ -2,6 +2,7 @@ namespace Truckoom.Maintenance.Api.EndPoints;
 
 using Microsoft.AspNetCore.Mvc;
 using Truckoom.Maintenance.Api.Filters;
+using Truckoom.Maintenance.Core;
 using Truckoom.Maintenance.Core.Models;
 
 public static class ServiceEndPoints

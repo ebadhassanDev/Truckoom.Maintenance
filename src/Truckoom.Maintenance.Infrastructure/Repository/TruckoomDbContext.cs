@@ -10,10 +10,10 @@ using Truckoom.Maintenance.Core.Models;
 public class TruckoomDbContext(DbContextOptions<TruckoomDbContext> option) : DbContext(option)
 {
     public DbSet<Service> Services { get; set; }
-    public DbSet<ServiceTasks> Tasks { get; set; }
-    public DbSet<User> User { get; set;}
+    public DbSet<ServiceTasks> ServiceTasks { get; set; }
+    public DbSet<User> Users { get; set;}
     protected override void OnModelCreating(ModelBuilder modelBuilder) => modelBuilder.Entity<Service>()
-            .HasMany(s => s.Tasks)
+            .HasMany(s => s.ServiceTasks)
             .WithOne()
             .OnDelete(DeleteBehavior.Cascade);
 }

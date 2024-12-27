@@ -92,14 +92,15 @@ public static class WebApplicationBuilderExtension
 
         #region Authentication
         _ = builder.Services.AddAuthorization();
-        //_ = builder.Services.AddAuthentication("Bearer").AddJwtBearer();
         _ = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(option => option.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]!)),
-            ValidateIssuerSigningKey = true
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!)),
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"]
         });
         #endregion Authentication
 
@@ -110,6 +111,8 @@ public static class WebApplicationBuilderExtension
         #region Database Health  Checkup
         _ = builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         _ = builder.Services.AddHealthChecks().AddDbContextCheck<TruckoomDbContext>();
+        _ = builder.Services.AddDbContext<TruckoomDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
         #endregion Database Health  Checkup
 
         #region Http & Endpoints
