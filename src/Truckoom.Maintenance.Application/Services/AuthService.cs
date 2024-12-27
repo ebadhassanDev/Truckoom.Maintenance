@@ -5,21 +5,23 @@ using System.Text;
 using Truckoom.Maintenance.Core.Interfaces;
 using Truckoom.Maintenance.Core.Models;
 
-public class AuthService(IUserRepository repository)
+public class AuthService(IUserRepository repository) : IAuthService
 {
     private readonly IUserRepository _userRepository = repository;
-    public async Task<bool> SignupAsync(string userName, string email, string password)
+    public async Task<bool> SignupAsync(UserDto userDto)
     {
-        if (await this._userRepository.GetUsernameAsync(userName) is not null)
+        if (await this._userRepository.GetUsernameAsync(userDto.UserName) is not null)
         {
             return false;
         }
-        var hashedPassword = HashPassword(password);
+        var hashedPassword = HashPassword(userDto.Password);
         User user = new()
         {
-            Username = userName,
-            Email = email,
-            PasswordHash = hashedPassword
+            Username = userDto.UserName,
+            Email = userDto.Email,
+            PasswordHash = hashedPassword,
+            FirstName = userDto.FirstName,
+            LastName = userDto?.LastName
         };
 
         await this._userRepository.AddUserAsync(user);
