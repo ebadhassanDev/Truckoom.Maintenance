@@ -1,6 +1,7 @@
 namespace Truckoom.Maintenance.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Truckoom.Maintenance.Application.Services;
+using Truckoom.Maintenance.Core;
 using Truckoom.Maintenance.Core.Interfaces;
 using Truckoom.Maintenance.Core.Models;
 using Truckoom.Maintenance.Infrastructure.Repository;
@@ -14,6 +15,7 @@ public static class InfrastructureExtension
         _ = services.AddScoped<IUserRepository, UserRepository>();
         _ = services.AddTransient<IAuthService, AuthService>();
         _ = services.AddTransient<ITokenService, JwtTokenService>();
+        _ = services.AddTransient<IServicesService, ServicesService>();
         _ = services.AddSingleton(TimeProvider.System);
         return services;
     }

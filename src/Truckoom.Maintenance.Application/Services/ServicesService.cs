@@ -1,7 +1,8 @@
 namespace Truckoom.Maintenance.Application.Services;
 
+using Truckoom.Maintenance.Core;
 using Truckoom.Maintenance.Core.Models;
-public class ServicesService(IServiceRepository service)
+public class ServicesService(IServiceRepository service) : IServicesService
 {
     private readonly IServiceRepository repository = service;
     public Task<IEnumerable<Service>> GetAllServicesAsync() => this.repository.GetAllServicesAsync();

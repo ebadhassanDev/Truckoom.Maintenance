@@ -29,6 +29,11 @@ public static class ServiceEndPoints
         .Produces(200)
         .ProducesProblem(500);
 
+        _ = root.MapPut("/",UpdateServiceAsync)
+        .Accepts<Service>("application/json")
+        .Produces(200)
+        .ProducesProblem(500);
+
         _ = root.MapDelete("/{id}", DeleteServiceAsync)
         .Produces(204).ProducesProblem(404).ProducesProblem(401).Produces(429);
 
@@ -39,22 +44,22 @@ public static class ServiceEndPoints
 
         return app;
     }
-    internal static async Task<IResult> GetAllServicesAsync([FromServices] IServiceRepository serviceRepository)
+    internal static async Task<IResult> GetAllServicesAsync([FromServices] IServicesService serviceService)
     {
         try
         {
-            return Results.Ok(await serviceRepository.GetAllServicesAsync().ConfigureAwait(false));
+            return Results.Ok(await serviceService.GetAllServicesAsync().ConfigureAwait(false));
         }
         catch (Exception ex)
         {
             return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
         }
     }
-    internal static async Task<IResult> AddServiceAsync([FromServices] IServiceRepository serviceRepository, Service service)
+    internal static async Task<IResult> UpdateServiceAsync([FromServices] IServicesService serviceService, Service service)
     {
         try
         {
-            await serviceRepository.AddServiceAsync(service).ConfigureAwait(false);
+            await serviceService.UpdateServiceAsync(service).ConfigureAwait(false);
             return Results.Ok();
         }
         catch (Exception ex)
@@ -62,22 +67,34 @@ public static class ServiceEndPoints
             return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
         }
     }
-    internal static async Task<IResult> GetServiceByIdAsync([FromServices] IServiceRepository serviceRepository, int id)
+    internal static async Task<IResult> AddServiceAsync([FromServices] IServicesService serviceService, Service service)
     {
         try
         {
-            return Results.Ok(await serviceRepository.GetServiceByIdAsync(id).ConfigureAwait(false));
+            await serviceService.AddServiceAsync(service).ConfigureAwait(false);
+            return Results.Ok();
         }
         catch (Exception ex)
         {
             return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
         }
     }
-    internal static async Task<IResult> DeleteServiceAsync([FromServices] IServiceRepository serviceRepository, int id)
+    internal static async Task<IResult> GetServiceByIdAsync([FromServices] IServicesService serviceService, int id)
     {
         try
         {
-            await serviceRepository.DeleteServiceAsync(id).ConfigureAwait(false);
+            return Results.Ok(await serviceService.GetServiceByIdAsync(id).ConfigureAwait(false));
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+        }
+    }
+    internal static async Task<IResult> DeleteServiceAsync([FromServices] IServicesService serviceService, int id)
+    {
+        try
+        {
+            await serviceService.DeleteServiceAsync(id).ConfigureAwait(false);
             return Results.Ok();
         }
         catch (Exception ex)

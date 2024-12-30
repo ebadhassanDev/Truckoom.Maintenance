@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Truckoom.Maintenance.Core.Interfaces;
 
-internal class JwtTokenService(IConfiguration configuration) : ITokenService
+internal sealed class JwtTokenService(IConfiguration configuration) : ITokenService
 {
     private readonly IConfiguration _configuration = configuration;
     public string GenerateJwtToken(string username, string userEmail)
