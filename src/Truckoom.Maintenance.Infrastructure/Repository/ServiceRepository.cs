@@ -9,8 +9,11 @@ internal sealed class ServiceRepository(TruckoomDbContext truckoomDb) : IService
     private readonly TruckoomDbContext _repository = truckoomDb;
     public async Task AddServiceAsync(Service service)
     {
-        _ = this._repository.Services.Add(service);
-        _ = await this._repository.SaveChangesAsync();
+        if (!_repository.Services.Any(x => x.ServiceName == service.ServiceName))
+        {
+            _ = this._repository.Services.Add(service);
+            _ = await this._repository.SaveChangesAsync();
+        }
     }
     public async Task DeleteServiceAsync(int id)
     {

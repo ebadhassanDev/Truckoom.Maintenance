@@ -1,31 +1,28 @@
 namespace Truckoom.Maintenance.Api.Extension;
-
-using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Web;
 
 public static class WebApplicationBuilderExtension
 {
     public static WebApplicationBuilder ConfigureApplicationBuilder(this WebApplicationBuilder builder)
     {
+        #region Configuration Variables
+
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        #endregion Configuration Variables
+
         #region Logging
 
-        _ = builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
-        {
-            var assembly = Assembly.GetEntryAssembly();
-
-            _ = loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration)
-                .Enrich.WithProperty(
-                    "Assembly Version",
-                    assembly?.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version)
-                .Enrich.WithProperty(
-                    "Assembly Informational Version",
-                    assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion);
-        });
+        _ = builder.Logging.ClearProviders();
+        _ = builder.Host.UseNLog();
+        _ = builder.Host.UseSerilog();
 
         #endregion Logging
 
@@ -109,9 +106,19 @@ public static class WebApplicationBuilderExtension
         #endregion 
 
         #region Database Health  Checkup
+        _ = builder.Services.AddDbContextPool<TruckoomDbContext>(option =>
+        {
+            option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+            .EnableSensitiveDataLogging();
+            option.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            option.ConfigureWarnings(builder =>
+            {
+                builder.Ignore(CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning);
+                builder.Ignore(RelationalEventId.PendingModelChangesWarning);
+            });
+        });
         _ = builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         _ = builder.Services.AddHealthChecks().AddDbContextCheck<TruckoomDbContext>();
-        _ = builder.Services.AddDbContext<TruckoomDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         #endregion Database Health  Checkup
 

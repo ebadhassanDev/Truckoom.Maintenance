@@ -32,7 +32,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
             statusCode,
             type,
         };
-
+        Log.Error($"{exception.Message}");
         httpContext.Response.ContentType = "application/json";
 
         httpContext.Response.StatusCode = statusCode;
