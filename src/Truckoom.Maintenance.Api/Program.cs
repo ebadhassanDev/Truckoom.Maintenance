@@ -16,14 +16,18 @@ var versionSet = app.NewApiVersionSet()
                     .Build();
 try
 {
-    Log.Information("Starting host");
+    using var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
+    var context = serviceScope.ServiceProvider.GetRequiredService<TruckoomDbContext>();
+    _ = context.Database.EnsureCreated();
+    context.Database.Migrate();
+
     app.Run();
     return 0;
 }
 catch (Exception ex)
 {
     Log.Fatal(ex, "Host terminated unexpectedly");
-    return 1;
+    return -1;
 }
 finally
 {
