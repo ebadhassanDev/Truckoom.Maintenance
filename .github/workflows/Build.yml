@@ -1,10 +1,8 @@
 name: 🚧 Build Verification
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: [ main ]  # Only run for PRs into main
 
 jobs:
   build:
