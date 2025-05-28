@@ -17,14 +17,14 @@ public class CorsConfiguration : IConfigureOptions<CorsOptions>
             builder => builder
                 .SetIsOriginAllowedToAllowWildcardSubdomains()
                 .AllowAnyHeader()
-                .AllowAnyMethod()
+                .WithHeaders("POST", "PUT", "PATCH", "GET", "DELETE")
                 .AllowCredentials());
 
         options.AddPolicy(
             CorsPolicyName.AllowAny,
             x => x
                 .AllowAnyOrigin()
-                .AllowAnyMethod()
+                .WithHeaders("POST", "PUT", "PATCH", "GET", "DELETE")
                 .AllowAnyHeader());
     }
 }
