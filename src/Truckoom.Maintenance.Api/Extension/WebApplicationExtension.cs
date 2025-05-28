@@ -1,6 +1,8 @@
 namespace Truckoom.Maintenance.Api.Extension;
 
 using Truckoom.Maintenance.Api.EndPoints;
+using Truckoom.Maintenance.Api.Middlewares;
+using Truckoom.Maintenance.Api.Middlewares.Extension;
 
 public static class WebApplicationExtension
 {
@@ -27,6 +29,12 @@ public static class WebApplicationExtension
         _ = app.UseSwagger();
         _ = app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Truckoom Maintenance v1"));
         #endregion Swagger
+
+        #region Exception Handling Middleware
+
+        _ = app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+        #endregion Exception Handling Middleware
 
         return app;
     }

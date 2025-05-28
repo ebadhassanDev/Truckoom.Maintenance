@@ -50,9 +50,9 @@ public static class ServiceEndPoints
         {
             return Results.Ok(await serviceService.GetAllServicesAsync().ConfigureAwait(false));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
     internal static async Task<IResult> UpdateServiceAsync([FromServices] IServicesService serviceService, Service service)
@@ -62,9 +62,9 @@ public static class ServiceEndPoints
             await serviceService.UpdateServiceAsync(service).ConfigureAwait(false);
             return Results.Ok();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
     internal static async Task<IResult> AddServiceAsync([FromServices] IServicesService serviceService, Service service)
@@ -74,9 +74,9 @@ public static class ServiceEndPoints
             await serviceService.AddServiceAsync(service).ConfigureAwait(false);
             return Results.Ok();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
     internal static async Task<IResult> GetServiceByIdAsync([FromServices] IServicesService serviceService, int id)
@@ -85,9 +85,9 @@ public static class ServiceEndPoints
         {
             return Results.Ok(await serviceService.GetServiceByIdAsync(id).ConfigureAwait(false));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
     internal static async Task<IResult> DeleteServiceAsync([FromServices] IServicesService serviceService, int id)
@@ -97,9 +97,9 @@ public static class ServiceEndPoints
             await serviceService.DeleteServiceAsync(id).ConfigureAwait(false);
             return Results.Ok();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 }

@@ -1,12 +1,12 @@
 namespace Truckoom.Maintenance.Api.Extension;
 
 using System.Reflection;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.IdentityModel.Tokens;
 
 public static class WebApplicationBuilderExtension
 {

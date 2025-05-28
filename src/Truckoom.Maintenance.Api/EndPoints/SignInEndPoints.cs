@@ -34,9 +34,9 @@ public static class SignInEndPoints
         {
             return Results.Ok(await authService.SignInAsync(userName, password));
         }
-        catch(Exception ex)
+        catch (Exception)
         {
-            return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
     internal static async Task<IResult> UserSignupAsync([FromServices] IAuthService authService, UserDto user)
@@ -45,9 +45,9 @@ public static class SignInEndPoints
         {
             return Results.Ok(await authService.SignupAsync(user).ConfigureAwait(false));
         }
-        catch(Exception ex)
+        catch (Exception)
         {
-            return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 }
